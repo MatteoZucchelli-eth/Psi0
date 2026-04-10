@@ -46,5 +46,8 @@ ENV PATH="/app/.venv/bin:$PATH"
 # Because the venv is activated and synced, this builds perfectly against cu128 torch
 RUN uv pip install flash-attn --no-build-isolation
 
-# 12. Default command
+# 12. Make scripts executable
+RUN chmod +x scripts/setup_and_train.sh scripts/train/psi0/*.sh
+
+# 13. Default command
 CMD ["/bin/bash"]

@@ -30,9 +30,9 @@ finetune_real_psi0_config \
 --train.name=finetune \
 --train.data_parallel=ddp \
 --train.mixed_precision=bf16 \
---train.train_batch_size=4 \
+--train.train_batch_size=16 \
 --train.max_checkpoints_to_keep=5 \
---train.gradient_accumulation_steps=4 \
+--train.gradient_accumulation_steps=1 \
 --train.learning_rate=1e-4 \
 --train.max_training_steps=40000 \
 --train.warmup_ratio=None \
@@ -44,7 +44,6 @@ finetune_real_psi0_config \
 --train.lr_scheduler_type=cosine \
 --train.lr_scheduler_kwargs.weight_decay=1e-6 \
 --train.lr_scheduler_kwargs.betas 0.95 0.999 \
---train.optimizer-foreach=False \
 --log.report_to=wandb \
 --data.root_dir=real \
 --data.train_repo_ids=$task \
