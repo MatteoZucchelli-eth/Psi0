@@ -55,7 +55,7 @@ ACTION_CKPT="$PSI_HOME/cache/checkpoints/psi0/postpre.1by1.pad36.2601131206.ckpt
 
 if [ ! -d "$VLM_CKPT" ] || [ -z "$(ls -A "$VLM_CKPT" 2>/dev/null)" ]; then
     echo "[setup] Downloading VLM checkpoint..."
-    huggingface-cli download USC-PSI-Lab/psi-model \
+    hf download USC-PSI-Lab/psi-model \
         --include="psi0/pre.fast.1by1.2601091803.ckpt.ego200k.he30k/*" \
         --local-dir="$PSI_HOME/cache/checkpoints" \
         --repo-type=model
@@ -65,7 +65,7 @@ fi
 
 if [ ! -d "$ACTION_CKPT" ] || [ -z "$(ls -A "$ACTION_CKPT" 2>/dev/null)" ]; then
     echo "[setup] Downloading Action Expert checkpoint..."
-    huggingface-cli download USC-PSI-Lab/psi-model \
+    hf download USC-PSI-Lab/psi-model \
         --include="psi0/postpre.1by1.pad36.2601131206.ckpt.he30k/*" \
         --local-dir="$PSI_HOME/cache/checkpoints" \
         --repo-type=model
@@ -78,7 +78,7 @@ TASK_DATA_DIR="$PSI_HOME/data/real/$TASK"
 
 if [ ! -d "$TASK_DATA_DIR" ] || [ -z "$(ls -A "$TASK_DATA_DIR" 2>/dev/null)" ]; then
     echo "[setup] Downloading task data for $TASK..."
-    huggingface-cli download USC-PSI-Lab/psi-data \
+    hf download USC-PSI-Lab/psi-data \
         "real/$TASK.zip" \
         --local-dir="$PSI_HOME/data" \
         --repo-type=dataset
@@ -91,7 +91,7 @@ fi
 
 # --- 5. Apply the lerobot metadata patch (idempotent) ---
 echo "[setup] Applying lerobot metadata patch..."
-python scripts/data/patch_lerobot_meta.py "$TASK_DATA_DIR"
+python3 scripts/data/patch_lerobot_meta.py "$TASK_DATA_DIR"
 
 # --- 6. Launch training ---
 echo "[setup] All prerequisites ready. Launching training..."
