@@ -35,10 +35,20 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.package-data]
+psi = ["assets/*"]
+
+# --- ADDED: Tell uv where the cu128 wheels live ---
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
 
 [tool.uv.sources]
 psi = { path = ".", editable = true }
 simple = { path = "third_party/SIMPLE", editable = true }
+# --- ADDED: Force torch packages to use the cu128 index ---
+torch = { index = "pytorch-cu128" }
+torchvision = { index = "pytorch-cu128" }
 
 [tool.uv.workspace]
 members = ["packages/*"]
