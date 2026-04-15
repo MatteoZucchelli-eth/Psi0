@@ -18,7 +18,7 @@
 set -euo pipefail
 
 
-TASK="Pick_bottle_and_turn_and_pour_into_cup"
+TASK="G1WholebodyXMovePickTeleop-v0"
 EXP="${2:-}"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

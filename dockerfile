@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # 2. Set the working directory
 WORKDIR /app
 
-# 3. Install system tools (Added 'curl' for the uv installer)
+# 3. Install system tools
 RUN apt-get update && apt-get install -y \
     build-essential \
     python3 \
@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
     python3-venv \
     ffmpeg \
     git \
+    git-lfs \
     unzip \
     nano \
     curl \

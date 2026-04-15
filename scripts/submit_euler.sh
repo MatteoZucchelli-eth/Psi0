@@ -10,9 +10,12 @@
 #        docker build -t psi0-environment .
 #
 #   2. Convert to Apptainer sandbox and compress:
-#        APPTAINER_NOHTTPS=1 apptainer build --sandbox --fakeroot \
-#            psi0-environment.sif docker-daemon://psi0-environment:latest
-#        tar -czf psi0-environment.tar.gz psi0-environment.sif
+#      (rootless Docker: export first, then build from archive)
+    #    docker save psi0-environment:latest -o psi0-environment.tar
+    #    APPTAINER_NOHTTPS=1 apptainer build --sandbox --fakeroot \
+    #        psi0-environment.sif docker-archive://psi0-environment.tar
+    #    tar -czf psi0-environment.tar.gz psi0-environment.sif
+    #    rm psi0-environment.tar
 #
 #   3. Transfer to Euler:
 #        rsync -avP psi0-environment.tar.gz \
