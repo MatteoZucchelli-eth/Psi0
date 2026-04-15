@@ -91,7 +91,7 @@ fi
 
 # --- 5. Apply the lerobot metadata patch (idempotent) ---
 echo "[setup] Applying lerobot metadata patch..."
-python3 scripts/data/patch_lerobot_meta.py "$TASK_DATA_DIR"
+python scripts/data/patch_lerobot_meta.py "$TASK_DATA_DIR"
 
 # --- 6. Launch training ---
 echo "[setup] All prerequisites ready. Launching training..."
