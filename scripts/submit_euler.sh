@@ -30,7 +30,7 @@
 #SBATCH --job-name=psi0-finetune
 #SBATCH --output=logs/psi0-%j.out
 #SBATCH --error=logs/psi0-%j.err
-#SBATCH --time=24:00:00
+#SBATCH --time=4:00:00
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=12
 #SBATCH --mem-per-cpu=8G
@@ -88,6 +88,7 @@ time singularity exec --nv \
     --bind "$PROJECT_DIR/.env:/app/.env" \
     --bind "$HFM_DIR/runs:/app/.runs" \
     --bind "$RESULTS_DIR:/results" \
+    --bind "$PROJECT_DIR/scripts:/app/scripts" \
     --env TRITON_CACHE_DIR=/hfm/cache/triton \
     --env TORCH_EXTENSIONS_DIR=/hfm/cache/torch_kernels \
     --env XDG_CACHE_HOME=/hfm/cache \

@@ -8,7 +8,8 @@
 #   ./scripts/setup_and_train.sh <task> [exp_name]
 #
 # Example:
-#   ./scripts/setup_and_train.sh Pick_bottle_and_turn_and_pour_into_cup
+#   ./scripts/setup_and_train.sh G1WholebodyXMovePickTeleop-v0
+#   ./scripts/setup_and_train.sh G1WholebodyBendPick-v0-psi0 bend-pick
 #
 # Prerequisites:
 #   - /hfm must be a writable directory (bind-mounted in Apptainer/Docker)
@@ -18,7 +19,7 @@
 set -euo pipefail
 
 
-TASK="G1WholebodyXMovePickTeleop-v0"
+TASK="${1:?Usage: $0 <task> [exp_name]}"
 EXP="${2:-}"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -47,7 +48,7 @@ echo "[setup] Task: $TASK"
 # --- 2. Create directory structure ---
 echo "[setup] Ensuring directory structure under $PSI_HOME ..."
 mkdir -p "$PSI_HOME/cache/checkpoints/psi0"
-mkdir -p "$PSI_HOME/data/real"
+mkdir -p "$PSI_HOME/data/simple"
 
 # --- 3. Download checkpoints if missing ---
 VLM_CKPT="$PSI_HOME/cache/checkpoints/psi0/pre.fast.1by1.2601091803.ckpt.ego200k.he30k"
@@ -74,30 +75,30 @@ else
 fi
 
 # --- 4. Download task data if missing ---
-TASK_DATA_DIR="$PSI_HOME/data/real/$TASK"
+TASK_DATA_DIR="$PSI_HOME/data/simple/$TASK"
 
 if [ ! -d "$TASK_DATA_DIR" ] || [ -z "$(ls -A "$TASK_DATA_DIR" 2>/dev/null)" ]; then
     echo "[setup] Downloading task data for $TASK..."
     hf download USC-PSI-Lab/psi-data \
-        "real/$TASK.zip" \
+        "simple/$TASK.zip" \
         --local-dir="$PSI_HOME/data" \
         --repo-type=dataset
 
     echo "[setup] Extracting task data..."
-    unzip -o "$PSI_HOME/data/real/$TASK.zip" -d "$PSI_HOME/data/real"
+    unzip -o "$PSI_HOME/data/simple/$TASK.zip" -d "$PSI_HOME/data/simple"
 else
     echo "[setup] Task data for $TASK already exists, skipping download."
 fi
 
-# --- 5. Apply the lerobot metadata patch (idempotent) ---
-echo "[setup] Applying lerobot metadata patch..."
-python scripts/data/patch_lerobot_meta.py "$TASK_DATA_DIR"
+# # --- 5. Apply the lerobot metadata patch (idempotent) ---
+# echo "[setup] Applying lerobot metadata patch..."
+# python scripts/data/patch_lerobot_meta.py "$TASK_DATA_DIR"
 
 # --- 6. Launch training ---
 echo "[setup] All prerequisites ready. Launching training..."
 
 if [ -n "$EXP" ]; then
-    exec scripts/train/psi0/finetune-real-psi0.sh "$TASK" "$EXP"
+    exec scripts/train/psi0/finetune-simple-psi0.sh "$TASK" "$EXP"
 else
-    exec scripts/train/psi0/finetune-real-psi0.sh "$TASK"
+    exec scripts/train/psi0/finetune-simple-psi0.sh "$TASK"
 fi
